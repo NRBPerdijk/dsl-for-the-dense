@@ -40,7 +40,7 @@ NRBPerdijk
 ### Bio
 #### This field supports Markdown. Your bio sells you. Who are you? Why should people listen to you? Who's your favorite member of One Direction? This is your chance to put it all out there.
 
-Nathan Perdijk: I am an unapologetic boardgame fanatic, with a rather old cat, a loving wife and a mastersdegree in History and Philosophy of Science (unsorted list). I have only come to the wonderful world of programming just over two years ago, when I decided to change careerpaths and learn Java! Not long after, I was forcefully introduced to the even more wonderful world of Scala to help write an extensive DSL my team was building for financial calculations. I learned Scala's DSL tricks while I was barely a programmer, demonstrating that you do not, in fact, need to be a coding guru to write a good DSL.
+Nathan Perdijk: I am an unapologetic boardgame fanatic, with a rather old cat, a loving wife and a mastersdegree in History and Philosophy of Science (unsorted list). I have only come to the wonderful world of programming just over two years ago, when I decided to change careerpaths and learn Java! Not long after, I was introduced to the even more wonderful world of Scala to help write an extensive DSL my team was building for financial calculations. I learned Scala's DSL tricks while I was barely a programmer, demonstrating that you do not, in fact, need to be a coding guru to write a good DSL.
 
 
 ## Meta-Programming with Scala Meta: so Meta right now
