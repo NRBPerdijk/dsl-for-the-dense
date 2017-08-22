@@ -26,21 +26,23 @@ Together we have written an extensive DSL based on a rule engine to enable runna
 
 ### Tags
 #### Tag your talk to make it easier for event organizers to be able to find. Examples are "ruby, javascript, rails".
-Scala, Domain Specific Language, DSL
+Scala, Domain Specific Language, DSL, Productivity
 
 ### Name
 Nathan Perdijk and Jan-Hendrik Kuperus
 
 ### Organisation or Affiliation
-CodeStar and Yoink! Development
+CodeStar and Yoink!
 
 ### Twitter Handle
-NRBPerdijk
+@NRBPerdijk @JHKuperus
 
 ### Bio
 #### This field supports Markdown. Your bio sells you. Who are you? Why should people listen to you? Who's your favorite member of One Direction? This is your chance to put it all out there.
 
-Nathan Perdijk: I am an unapologetic boardgame fanatic, with a rather old cat, a loving wife and a mastersdegree in History and Philosophy of Science (unsorted list). I have only come to the wonderful world of programming just over two years ago, when I decided to change careerpaths and learn Java! Not long after, I was introduced to the even more wonderful world of Scala to help write an extensive DSL my team was building for financial calculations. I learned Scala's DSL tricks while I was barely a programmer, demonstrating that you do not, in fact, need to be a coding guru to write a good DSL.
+Nathan Perdijk: I am an unapologetic board game fanatic, with a rather old cat, a loving wife and a Master's degree in History and Philosophy of Science (unsorted list). I have only come to the wonderful world of programming just over two years ago, when I decided to change career paths and learn Java! Not long after, I was introduced to the even more wonderful world of Scala to help write an extensive DSL my team was building for financial calculations. I learned Scala's DSL tricks while I was barely a programmer, demonstrating that you do not, in fact, need to be a coding guru to write a good DSL.
+
+Jan-Hendrik Kuperus: Coding is fun, especially when it makes our lives easier. This is what I look for in any project and it often takes me deep into the underlying technology. I enjoy sharing what I find and enabling others to work smarter. I am proud to say our DSL is now being used by analysts and makes them build features on their own. When I'm not coding, I usually spend my time building Lego-stuff, playing board games and helping my kids explore the world.
 
 
 ## Meta-Programming with Scala Meta: so Meta right now
