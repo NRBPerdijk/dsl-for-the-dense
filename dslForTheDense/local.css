@@ -1,0 +1,100 @@
+
+ul.horizontal-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.horizontal-list li {
+    float: left;
+}
+
+.horizontal-list li span {
+    display: block;
+    text-align: center;
+    padding: 0.5em;
+}
+
+.icon-size-1 {
+    height: 4em;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+.no-bullet, .no-bullet li {
+    list-style-type: none;
+}
+
+.company-logo, .company-logo.placeholder {
+    position: absolute;
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+}
+
+.company-logo, .company-logo.placeholder {
+    background: none;
+    border: 2px transparent #ccc;
+}
+
+.company-logo {
+    background: white;
+    border: 2px solid #ccc;
+}
+
+.company-logo div {
+    width: 100%;
+    height: 100%;
+    background-position: center center;
+    background-size: contain;
+    overflow: hidden;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+}
+
+.company-logo img.no-borders {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+
+/* State Stuff */
+
+.light-image-background div.reveal.slide.center.ready section {
+    background-color: rgba(0, 43, 54, 0.7);
+}
+
+.text-rectangle {
+    width: 25%;
+    height: 140px;
+    background-color: white;
+    border: 2px solid #ccc;
+    color: black;
+    vertical-align: middle;
+}
+
+div.concept-box {
+    position: relative;
+    display: block;
+    background: white;
+    width: 300px;
+    height: 140px;
+    border: 2px solid #ccc;
+    margin: 15px;
+}
+
+.concept-box div {
+    display: block;
+    position: absolute;
+    margin-top: -0.75em;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+strong {
+    color: white;
+}
