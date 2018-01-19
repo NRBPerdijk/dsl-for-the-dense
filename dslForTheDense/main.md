@@ -176,6 +176,52 @@ revealOptions:
 
 ---
 
+### What is a DSL ?
+
+* Formal definition ?
+* My Definition: altering how public API should be called purely to increase the ease of use or aesthetics of the library
+
+---
+
+### Purposes of a DSL
+
+* Abstract dificult initialisation logic away
+* Increase readability of code
+* Guide people less familiar with the code through the API
+* Increase 'configurability' of a library
+
+---
+
+### Wolf, Sheep and Cabbage
+
+* Participants: Wolf, Sheep, Cabbage
+* Activities: Enter boat, Cross the stream, Exit boat
+* Outcomes: Participant eaten, No eating at all
+
+---
+
+### The Code for the Problem
+
+---
+
+### The DSL for the problem
+
+```
+Sheep enters the boat
+The boat crosses the stream
+
+Sheep exits the boat
+The boat crosses the stream
+
+etc...
+```
+
+---
+
+### Anatomy of the DSL
+
+---
+
 ### Real Life Event Sourcing with Axon Framework
 
 <div style="position: absolute; left: 5%; top:22%; width: 20%;">
