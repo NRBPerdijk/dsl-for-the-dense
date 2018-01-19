@@ -2,8 +2,8 @@ object Main {
   def main(args: Array[String]) : Unit = {
     LeftShore.boatPresent = true
     LeftShore.creatures = Set(Wolf, Sheep, Cabbage)
-    LeftShore.isSafe()
-    RightShore.isSafe()
+    LeftShore.assertIsSafe()
+    RightShore.assertIsSafe()
 
     Boat.transport(Some(Sheep), RightShore)
     Boat.transport(None, LeftShore)
@@ -15,28 +15,22 @@ object Main {
   }
 }
 
-
-trait BoatOccupant
-trait BoatOperator {
-  val canSail: Boolean
-}
 trait Creature
 
 case object Wolf extends Creature
 case object Sheep extends Creature
 case object Cabbage extends Creature
-object EmptySeat extends Creature
 
 object Boat {
   var currentShore: Shore = LeftShore
-  def transport(optionalCreature: Option[Creature], destination: Shore) = {
+  def transport(optionalCreature: Option[Creature], destination: Shore): Unit = {
     currentShore.takeCreature(optionalCreature)
     currentShore.boatPresent = false
-    currentShore.isSafe()
+    currentShore.assertIsSafe()
     currentShore = destination
     currentShore.boatPresent = true
     currentShore.placeCreature(optionalCreature)
-    currentShore.isSafe()
+    currentShore.assertIsSafe()
     if (CompleteCondition.areWeDoneYet(currentShore)) CompleteCondition.printSolution()
   }
   var occupant: Option[Creature] = None
@@ -61,7 +55,7 @@ trait Shore {
     case None =>
   }
 
-  def isSafe(): Unit = {
+  def assertIsSafe(): Unit = {
     if (!boatPresent) {
       if (creatures.contains(Sheep) && creatures.contains(Wolf)) {
         throw new Exception(s"Poor logic has resulted in the unfortunate demise of one of your creatures... Sheep has been eaten on shore $shoreName, mission failed!")
