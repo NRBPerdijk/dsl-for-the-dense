@@ -1,91 +1,27 @@
+import ExternalApi._
+import ExternalApi.CompleteCondition._
+
 object Main {
   def main(args: Array[String]) : Unit = {
-    LeftShore.boatPresent = true
-    LeftShore.creatures = Set(Wolf, Sheep, Cabbage)
-    LeftShore.assertIsSafe()
-    RightShore.assertIsSafe()
+    StartingShore.boatPresent = true
+    StartingShore.creatures = Set(Wolf, Sheep, Cabbage)
+    StartingShore.assertIsSafe()
+    DestinationShore.assertIsSafe()
 
-    Boat.transport(Some(Sheep), RightShore)
-    Boat.transport(None, LeftShore)
-    Boat.transport(Some(Cabbage), RightShore)
-    Boat.transport(Some(Sheep), LeftShore)
-    Boat.transport(Some(Wolf), RightShore)
-    Boat.transport(None, LeftShore)
-    Boat.transport(Some(Sheep), RightShore)
-  }
-}
+    Boat.transport(Some(Cabbage), StartingShore)
+    Boat.transport(Some(Sheep), DestinationShore)
+    Boat.transport(None, StartingShore)
+    Boat.transport(Some(Cabbage), DestinationShore)
+    Boat.transport(Some(Sheep), StartingShore)
+    Boat.transport(Some(Wolf), DestinationShore)
+    Boat.transport(None, StartingShore)
 
-trait Creature
-
-case object Wolf extends Creature
-case object Sheep extends Creature
-case object Cabbage extends Creature
-
-object Boat {
-  var currentShore: Shore = LeftShore
-  def transport(optionalCreature: Option[Creature], destination: Shore): Unit = {
-    currentShore.takeCreature(optionalCreature)
-    currentShore.boatPresent = false
-    currentShore.assertIsSafe()
-    currentShore = destination
-    currentShore.boatPresent = true
-    currentShore.placeCreature(optionalCreature)
-    currentShore.assertIsSafe()
-    if (CompleteCondition.areWeDoneYet(currentShore)) CompleteCondition.printSolution()
-  }
-  var occupant: Option[Creature] = None
-}
-
-trait Shore {
-  var boatPresent: Boolean = false
-  var creatures: Set[Creature] = Set.empty
-  val shoreName: String
-
-  def placeCreature(optionalCreature: Option[Creature]): Unit  = optionalCreature match {
-    case Some(toBePlacedCreature) =>
-      if (!creatures.contains(toBePlacedCreature)) creatures = creatures + toBePlacedCreature
-      else throw new IllegalStateException(s"""Creature cannot be placed on shore $shoreName, because it is already there!""")
-    case None =>
-  }
-
-  def takeCreature(optionalCreature: Option[Creature]): Unit = optionalCreature match {
-    case Some(toBeRemovedCreature) =>
-      if (creatures.contains(toBeRemovedCreature)) creatures = creatures.filterNot(c => c == toBeRemovedCreature)
-      else throw new IllegalStateException(s"""Creature cannot be taken from shore $shoreName, because it is not there!""")
-    case None =>
-  }
-
-  def assertIsSafe(): Unit = {
-    if (!boatPresent) {
-      if (creatures.contains(Sheep) && creatures.contains(Wolf)) {
-        throw new Exception(s"Poor logic has resulted in the unfortunate demise of one of your creatures... Sheep has been eaten on shore $shoreName, mission failed!")
-      }
-      if (creatures.contains(Cabbage) && creatures.contains(Sheep)) {
-        throw new Exception(s"Poor logic has resulted in the unfortunate demise of one of your creatures... Cabbage has been eaten on shore $shoreName, mission failed!")
-      }
+    if (goalAchieved(Boat.transport(Some(Sheep), DestinationShore))) {
+      printSolution()
+    } else {
+      print("oh no, we've failed!")
     }
-  }
 
-}
-
-case object CompleteCondition {
-  def areWeDoneYet(shore: Shore): Boolean = shore match {
-    case LeftShore => false
-    case RightShore => shore.boatPresent &&
-      shore.creatures.contains(Wolf) &&
-      shore.creatures.contains(Sheep) &&
-      shore.creatures.contains(Cabbage)
-  }
-
-  def printSolution(): Unit = {
-    println("We're done here!")
   }
 }
 
-case object LeftShore extends Shore {
-  override val shoreName: String = "LeftShore"
-}
-
-case object RightShore extends Shore {
-  override val shoreName: String = "RightShore"
-}
