@@ -176,23 +176,28 @@ revealOptions:
 
 ---
 
-### What is a DSL ?
+### What is a DSL ? (1/2)
 
-* Formal definition ?
-* My Definition: altering how public API should be called purely to increase the ease of use or aesthetics of the library
+* Formal definition: A __domain-specific language (DSL)__ is a computer language specialized to a particular application domain. (...) the term "domain-specific language" has become more popular due to the rise of domain-specific modeling. (Wikipedia, consulted 19 January 2018)
+
+---
+
+### What is a DSL ? (2/2)
+
+* Our definition: Providing __easy to use__ and/or aesthetically pleasing ways to access a (public) API to improve its __domain expressiveness__ and expand its potential userbase.
 
 ---
 
 ### Purposes of a DSL
 
-* Abstract dificult initialisation logic away
+* Abstract difficult initialisation logic away
 * Increase readability of code
-* Guide people less familiar with the code through the API
+* Guide people less familiar with the library through the API
 * Increase 'configurability' of a library
 
 ---
 
-### Wolf, Sheep and Cabbage
+### Wolf, Sheep and Cabbage: a Logic Problem
 
 * Participants: Wolf, Sheep, Cabbage
 * Activities: Enter boat, Cross the stream, Exit boat
