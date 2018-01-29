@@ -1,22 +1,24 @@
-import ExternalApi._
 import ExternalApi.CompleteCondition._
+import MyDsl._
 
 object Main {
   def main(args: Array[String]) : Unit = {
-    StartingShore.boatPresent = true
-    StartingShore.creatures = Set(Wolf, Sheep, Cabbage)
-    StartingShore.assertIsSafe()
-    DestinationShore.assertIsSafe()
+    Setup(
+      Boat on StartingShore,
+      Wolf on StartingShore,
+      Sheep on StartingShore,
+      Cabbage on StartingShore
+    ).execute()
 
-    Boat.transport(Some(Cabbage), StartingShore)
-    Boat.transport(Some(Sheep), DestinationShore)
-    Boat.transport(None, StartingShore)
-    Boat.transport(Some(Cabbage), DestinationShore)
-    Boat.transport(Some(Sheep), StartingShore)
-    Boat.transport(Some(Wolf), DestinationShore)
-    Boat.transport(None, StartingShore)
+    Boat move Cabbage to StartingShore
+    Boat move Sheep to DestinationShore
+    Boat move None to StartingShore
+    Boat move Cabbage to DestinationShore
+    Boat move Sheep to StartingShore
+    Boat move Wolf to DestinationShore
+    Boat move None to StartingShore
 
-    if (goalAchieved(Boat.transport(Some(Sheep), DestinationShore))) {
+    if (goalAchieved(Boat move Sheep to DestinationShore)) {
       printSuccessMessage()
     } else {
       print("oh no, we've failed!")
