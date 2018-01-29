@@ -66,7 +66,7 @@ object ExternalApi {
         shore.creatures.contains(Cabbage)
     }
 
-    def printSolution(): Unit = {
+    def printSuccessMessage(): Unit = {
       println("Success!")
     }
   }

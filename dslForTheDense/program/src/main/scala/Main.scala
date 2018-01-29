@@ -17,7 +17,7 @@ object Main {
     Boat.transport(None, StartingShore)
 
     if (goalAchieved(Boat.transport(Some(Sheep), DestinationShore))) {
-      printSolution()
+      printSuccessMessage()
     } else {
       print("oh no, we've failed!")
     }
