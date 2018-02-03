@@ -1,3 +1,17 @@
+/**
+  * Author: Nathan R.B. Perdijk
+  *
+  * The "ExternalApi" used in the "Writing a DSL for the Dense with Scala" session.
+  * The ExternalAPI allows its users to model the Wolf, Sheep and Cabbage puzzle (also known as the Fox, Goose and Bag of Beans puzzle).
+  * The ExternalApi contains several issues that you might use a DSL to remedy if the original code is not under your control, such as:
+  * - very easy to fumble the setup: the API doesn't enforce a proper setup but DOES expect the user to provide it,
+  * - very easy to cheat: commands used during setup could just as easily be used to place creatures or the boat wherever the user pleases at any time,
+  * - clumsy validation of the solution,
+  * - imperative execution & mutability,
+  * - general unfriendlyness towards non-coding readers (such as requiring Option[Creature] as imput)
+  * - other issues...
+  * (To be clear, it is Intentionally Bad™)
+  */
 object ExternalApi {
   trait Creature
 
