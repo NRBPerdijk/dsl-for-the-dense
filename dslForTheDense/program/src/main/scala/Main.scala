@@ -7,8 +7,8 @@
   *
   * We should find a way to get rid of these imports!
   */
-import ExternalApi._
-import ExternalApi.CompleteCondition._
+import ExternalApi.StartingShore
+import ExternalApi.DestinationShore
 
 /**
   * Scala: The underscore (_) is Scala's way of performing a package import.
@@ -19,6 +19,12 @@ import MyDsl.{Boat, Cabbage, Sheep, Wolf, _}
 
 object Main {
   def main(args: Array[String]) : Unit = {
+    /**
+      * Scala: you don't need ';' to terminate statements. The compiler infers them for you!
+      * You also don't need . or () (when defs have only a single parameter) when doing function calls.
+      * If the construct becomes too complex though, the compiler may need help parsing instructions in the right order.
+      * When writing a DSL, great care must be taken that the compiler won't have reasons for ambiguous interpretation!
+      */
     Setup(
       /**
         * Notice the underlining that your editor (or at least IntelliJ IDEA) provides to indicate that something implicit
@@ -28,38 +34,23 @@ object Main {
      Wolf on StartingShore,
      Sheep on StartingShore,
      Cabbage on StartingShore
-    ) execute()
+    ) execute (
     /**
-      * Scala: you don't need ';' to terminate statements. The compiler infers them for you!
-      * You also don't need . or () (when defs have only a single parameter) when doing function calls.
-      * If the construct becomes too complex though, the compiler may need help parsing instructions in the right order.
-      * When writing a DSL, great care must be taken that the compiler won't have reasons for ambiguous interpretation!
+      * This is no longer imperative!
+      * By returning a MoveOrder that holds the required information for the transportation, as well as a function apply()
+      * that actually performs it, we can offload the execution of MoveOrders into the execute method that comes with the Setup.
+      * Here, we can do something clever, like checking for every move whether the goal has been achieved, without boring
+      * the user with repetitive manual checks!
+      * The vararg allows the user to give as little or as many move orders as they wish, separated by comma's.
       */
-
-//    StartingShore creatures = Set(Wolf, Sheep, Cabbage)
-
-    /**
-      * This is still imperative!
-      * Not really a set of instructions, but instead their immediate execution, which prevents us from doing something
-      * smart like checking whether the goal has been achieved after every move... Unless you wrap every execution in
-      * goalAchieved(), but that looks rather ugly and is definitely not user-friendly. We should fix that!
-      */
-    Boat move Cabbage to StartingShore
-    Boat move Sheep to DestinationShore
-    Boat move None to StartingShore
-    Boat move Cabbage to DestinationShore
-    Boat move Sheep to StartingShore
-    Boat move Wolf to DestinationShore
-    Boat move None to StartingShore
-
-    /**
-      * The ugly old call to Boat.transport still works, we should fix that!
-      */
-    if (goalAchieved(Boat transport(Sheep, DestinationShore))) {
-      printSuccessMessage()
-    } else {
-      print("oh no, we've failed!")
-    }
-
+      Boat move Cabbage to StartingShore,
+      Boat move Sheep to DestinationShore,
+      Boat move None to StartingShore,
+      Boat move Cabbage to DestinationShore,
+      Boat move Sheep to StartingShore,
+      Boat move Wolf to DestinationShore,
+      Boat move None to StartingShore,
+      Boat move Sheep to DestinationShore
+      )
   }
 }

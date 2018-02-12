@@ -13,6 +13,7 @@
   * the originals while still referring them if necessary...
   */
 import ExternalApi.{DestinationShore, Shore, StartingShore, Boat => ExternalApiBoat, Cabbage => ExternalApiCabbage, Creature => ExternalApiCreature, Sheep => ExternalApiSheep, Wolf => ExternalApiWolf}
+import ExternalApi.CompleteCondition._
 
 /**
   * We need this import, so that the Implicits trait can use the features provided by the MyDsl package object
@@ -52,15 +53,24 @@ package object MyDsl extends Implicits {
       * However, remember that the primary function of a DSL is user-friendliness,
       * so there may be reasons to ignore this convention when writing/using a DSL.
       *
-      * The execute() performs the actual placement and also checks whether the setup is a legal starting situation (none of the creatures get eaten).
+      * The execute(moveOrders) performs the actual placement and also checks whether the setup is a legal starting situation (none of the creatures get eaten).
+      * It also now performs the repetetive task of executing every move order parsed into the function and checking whether that move
+      * has achieved the goal. This ugly if-statement & condition checking has now been conveniently removed from the user's burden.
       */
-    def execute() = {
+    def execute(moveOrders: MoveOrder*) = {
       boatOnShore()
       wolfOnShore()
       sheepOnShore()
       cabbageOnShore()
       StartingShore assertIsSafe()
       DestinationShore assertIsSafe()
+
+      /**
+        * For every move order in moveOrders, check if goalAchieved after its execution, then print a corresponding message...
+        */
+      moveOrders map {
+        mo: MoveOrder => if (goalAchieved(mo())) printSuccessMessage() else println("We're not quite there yet")
+      }
     }
   }
 
@@ -128,10 +138,12 @@ package object MyDsl extends Implicits {
     * The MoveOrder is not actually used yet, because this was when I ran out of time, but it will be used in the solution
     * to make the moving of the boat lazy, which allows us to do things repetitively between moves without cluttering our
     * intructions!
-    * @param creature
+    * @param optionalCreature
     * @param shore
     */
-  case class MoveOrder(creature: Creature, shore: Shore)
+  case class MoveOrder(optionalCreature: Option[ExternalApiCreature], shore: Shore) {
+    def apply(): Shore = ExternalApiBoat.transport(optionalCreature, shore)
+  }
 
 
   /**
@@ -140,23 +152,13 @@ package object MyDsl extends Implicits {
     * The ToWord provides a "to(shore: Shore)" method, which allows us to chain another single-parameter method call.
     * @param creature
     */
-  case class ToWord(creature: Either[Creature, Option[Nothing]]) {
+  case class ToWord(creature: Option[ExternalApiCreature]) {
     /**
-      * Scala: this def uses a pattern match rather than an if-statement with instanceof. Scala's pattern match is very powerful
-      * and allows you to avoid cumbersome and ugly type casting: you can think of it as a very powerful switch statement.
-      * @param shore
-      * @return
+      * Scala: Options are quite powerful, in this case Option could easily replace the functionality of the Either (which was
+      * there for demo-purposes of Either and pattern matching only) and it works better with the rest of the code.
       */
-    def to(shore: Shore) = creature match {
-      /**
-        * Scala: Notice how the contents of the Left and Right can be accessed through naming them inside the pattern match!
-        * (Disclaimer:
-        * I have replaced the reference to creature below with c to avoid shadowing the creature in the class definition.
-        * This managed to escape my attention on stage.)
-        */
-      case Left(c) => Boat.transport(c, shore)
-      case Right(nothing) => Boat.transport(nothing, shore)
-    }
+    def to(shore: Shore): MoveOrder = MoveOrder(creature, shore)
+
   }
 
   /**
@@ -164,13 +166,14 @@ package object MyDsl extends Implicits {
     * More importantly, it doesn't support the DSL functionality we want. But now it does! You can give it Creatures without
     * wrapping them in a Some, and you can use the "flow" notation by only giving it a Creature or a None and then calling to(shore: Shore)
     * on the result (see [[ToWord]]).
+    * The transport def's of the original ExternalApi.Boat are now obsolete: their imperative functionality has been replaced
+    * by the MoveOrder. Removing the transport def from our own Boat effectively removes unwanted functionality from the
+    * API!
     */
   trait Boat extends Placeable
   case object Boat extends Boat {
-    def move(creature: Creature) = ToWord(Left(creature))
-    def move(nothing: Option[Nothing]) = ToWord(Right(nothing))
-    def transport(creature: Creature, shore: Shore) = ExternalApiBoat.transport(creature, shore)
-    def transport(nothing: Option[Nothing], shore: Shore) = ExternalApiBoat.transport(nothing, shore)
+    def move(creature: Creature) = ToWord(creature)
+    def move(nothing: Option[Nothing]) = ToWord(nothing)
   }
 
   /**
