@@ -1,14 +1,12 @@
 /**
   * Author: Nathan R.B. Perdijk
   *
-  * We still have imports that reference ExternalApi.
-  * Preferably we want to lock the DSL user out of accessing these objects altogether, because they are so easily
+  * We no longer have imports that reference ExternalApi! Yay!
   * mutated and cheated! We don't want them getting around our DSL, because our DSL is supposed to make their job easier...
-  *
-  * We should find a way to get rid of these imports!
+  * It's not yet impossible for them to get at the original contents without importing them. I've done some work to make the original
+  * Shore objects, that had lots of mutability and cheatability very hard to reach for the user indeed. Similar tactics could be used
+  * to shield the DSL users from all other "leaking" ExternalApi stuff.
   */
-import ExternalApi.StartingShore
-import ExternalApi.DestinationShore
 
 /**
   * Scala: The underscore (_) is Scala's way of performing a package import.

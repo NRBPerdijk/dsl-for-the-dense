@@ -12,7 +12,10 @@
   * "fix" poorly named classes, to resolve naming conflicts between libraries or (in this case) to be able to effectively shadow
   * the originals while still referring them if necessary...
   */
-import ExternalApi.{DestinationShore, Shore, StartingShore, Boat => ExternalApiBoat, Cabbage => ExternalApiCabbage, Creature => ExternalApiCreature, Sheep => ExternalApiSheep, Wolf => ExternalApiWolf}
+import ExternalApi.{Boat => ExternalApiBoat, Cabbage => ExternalApiCabbage, Creature => ExternalApiCreature, Sheep => ExternalApiSheep, Wolf => ExternalApiWolf}
+import ExternalApi.{StartingShore => ExternalApiStartingShore}
+import ExternalApi.{DestinationShore => ExternalApiDestinationShore}
+import ExternalApi.{Shore => ExternalApiShore}
 import ExternalApi.CompleteCondition._
 
 /**
@@ -62,13 +65,19 @@ package object MyDsl extends Implicits {
       wolfOnShore()
       sheepOnShore()
       cabbageOnShore()
-      StartingShore assertIsSafe()
-      DestinationShore assertIsSafe()
+      ExternalApiStartingShore assertIsSafe()
+      ExternalApiDestinationShore assertIsSafe()
 
       /**
         * For every move order in moveOrders, check if goalAchieved after its execution, then print a corresponding message...
         */
       moveOrders map {
+        /**
+          * Scala: you can declare imports in any scope you like! So importing a dangerous implicit that you do not want to leak outside
+          * of a very narrow scope, such as inside a function, can be done safely! Now we can convert to the dangerous ExternalApiShore
+          * (and back) if we have to, but without enabling the DSL-user to do the same!
+          */
+        import ShoreToExternalImplicits._
         mo: MoveOrder => if (goalAchieved(mo())) printSuccessMessage() else println("We're not quite there yet")
       }
     }
@@ -123,6 +132,14 @@ package object MyDsl extends Implicits {
   }
 
   /**
+    * The same trick works great on the Shore objects as well, shielding a lot of unwanted/unsafe functionality from the DSL user.
+    */
+  trait Shore
+  object StartingShore extends Shore
+  object DestinationShore extends Shore
+
+
+  /**
     * Scala: a case class is very much like a class, except that it gives you a lot of functionality for free, such as:
     * - it comes with a free object of the same name, that has an apply() that returns a new instance of the class
     * (in this case:
@@ -142,6 +159,16 @@ package object MyDsl extends Implicits {
     * @param shore
     */
   case class MoveOrder(optionalCreature: Option[ExternalApiCreature], shore: Shore) {
+    /**
+      * Scala: want to import something only within a particular class? Of course you can, a class declaration is a scope
+      * afterall! See [[Setup]]
+      */
+    import ShoreToExternalImplicits._
+    /**
+      * Wow, something quite implicit is going on here! One implicit turns the Shore into an ExternalApiShore so the ExternalApiBoat
+      * will know what to do with it. The second implicit turns the result back into our newly defined Shore to safely lock the user out
+      * of the nasty mutable and cheatable features that ExternalApiShore provides.
+      */
     def apply(): Shore = ExternalApiBoat.transport(optionalCreature, shore)
   }
 
@@ -189,8 +216,9 @@ package object MyDsl extends Implicits {
     * @tparam S
     */
   case class On[P <: Placeable, S <: Shore](placeable: P, shore: S) {
+    import ShoreToExternalImplicits._
     def apply() = placeable match {
-      case b: Boat => shore.boatPresent =true
+      case b: Boat => shore.boatPresent = true
       case c: Creature => shore.placeCreature(c)
     }
   }
@@ -272,12 +300,14 @@ trait Implicits {
 
 }
 
+object ShoreToExternalImplicits {
+  implicit def shoreToExternalShore(shore: Shore): ExternalApiShore = shore match {
+    case StartingShore => ExternalApiStartingShore
+    case DestinationShore => ExternalApiDestinationShore
+  }
+  implicit def externalShoreToShore(shore: ExternalApiShore): Shore = shore match {
+    case ExternalApiStartingShore => StartingShore
+    case ExternalApiDestinationShore => DestinationShore
+  }
 
-/**
-  * Renamed imports I didn't get around to using in the talk.
-  */
-//import ExternalApi.{StartingShore => ExternalApiStartingShore}
-//import ExternalApi.{DestinationShore => ExternalApiDestinationShore}
-//import ExternalApi.{Shore => ExternalApiShore}
-
-
+}
